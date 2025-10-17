@@ -1,5 +1,5 @@
 import 'package:first_app/dice_roller.dart';
-import 'package:first_app/text_widget.dart';
+// import 'package:first_app/text_widget.dart';
 import 'package:flutter/material.dart';
 
 // Creating variables for gradient alignment
