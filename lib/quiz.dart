@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app/data/questions.dart';
 import 'package:quiz_app/question_screen.dart';
 import 'package:quiz_app/start_screen.dart';
 
@@ -10,6 +11,7 @@ var endPoint = AlignmentGeometry.bottomRight;
 
 class Quiz extends StatefulWidget {
   const Quiz({super.key});
+
   @override
   State<Quiz> createState() {
     return _QuizState();
@@ -17,6 +19,7 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
+  List<String> selectedAnswers = [];
   Widget? activeScreen;
 
   @override
@@ -27,8 +30,19 @@ class _QuizState extends State<Quiz> {
 
   void switchScreen() {
     setState(() {
-      activeScreen = QuestionScreen();
+      activeScreen = QuestionScreen(choosedAnswer);
     });
+  }
+
+  void choosedAnswer(String answer) {
+    selectedAnswers.add(answer);
+
+    if (selectedAnswers.length == questions.length) {
+      setState(() {
+        selectedAnswers = [];
+        activeScreen = StartScreen(switchScreen);
+      });
+    }
   }
 
   @override
