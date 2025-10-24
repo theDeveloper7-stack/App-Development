@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_app/data/questions.dart';
 import 'package:quiz_app/question_screen.dart';
+import 'package:quiz_app/result_screen.dart';
 import 'package:quiz_app/start_screen.dart';
 
 var startColor = const Color.fromARGB(255, 55, 5, 139);
@@ -39,8 +40,8 @@ class _QuizState extends State<Quiz> {
 
     if (selectedAnswers.length == questions.length) {
       setState(() {
-        selectedAnswers = [];
-        activeScreen = StartScreen(switchScreen);
+        // selectedAnswers = [];
+        activeScreen = ResultScreen(selectedAnswers);
       });
     }
   }
