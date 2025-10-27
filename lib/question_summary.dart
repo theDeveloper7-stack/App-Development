@@ -18,18 +18,34 @@ class QuestionSummary extends StatelessWidget {
               {
                 return Row(
                   children: [
-                    Text(((data['question_index'] as int) + 1).toString()),
+                    Text(((data['question_index'] as int) + 1).toString(),
+                          style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
                     // (data['question_index'] as int) this is how we typecast in dart
                     Expanded(
                       // without Expanded the content inside Row grows on its own
                       // but with Expanded it will take as much width as the contents needed
                       child: Column(
                         children: [
-                          Text(data['questions'] as String),
+                          Text(data['questions'] as String,
+                            style: TextStyle(
+                              color: Colors.white,
+                              ),
+                          ),
                           SizedBox(height: 5,),
-                          Text(data['user_answer'] as String),
-                          Text(data['correct_answer'] as String),
-                      ],
+                          Text(data['user_answer'] as String,
+                            style: TextStyle(
+                              color: Colors.white,
+                                ),
+                              ),
+                          Text(data['correct_answer'] as String,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                        ],
                       ),
                     )
                   ],
