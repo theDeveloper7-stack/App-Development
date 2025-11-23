@@ -1,7 +1,13 @@
+import 'package:expense_tracker_app/models/expense.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+final formater = DateFormat.yMd();
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
+  const NewExpense({super.key, required this.onAddExpense});
+
+  final void Function(Expense expense) onAddExpense;
 
   @override
   State<NewExpense> createState() {
@@ -18,6 +24,8 @@ class _NewExpenseState extends State<NewExpense> {
 
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
+  DateTime? _selectedDate;
+  Category _selectedCategory = Category.leisure;
 
   @override
   void dispose() {
@@ -27,15 +35,54 @@ class _NewExpenseState extends State<NewExpense> {
   }
   // This will clear the memory when the widget is not in use
 
-  void _datePicker() {
+  void _datePicker() async {
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 25, now.month, now.day);
     final lastDate = DateTime.now();
-    showDatePicker(
+    final pickedDate = await showDatePicker(
       context: context,
       initialDate: now,
       firstDate: firstDate,
       lastDate: lastDate,
+    );
+    setState(() {
+      _selectedDate = pickedDate;
+    });
+  }
+
+  void _submitExpenseData() {
+    final enteredAmount = double.tryParse(_amountController.text);
+    final amountIsInvalid = (enteredAmount == null || enteredAmount <= 0);
+    if (_titleController.text.trim().isEmpty ||
+        amountIsInvalid ||
+        _selectedDate == null) {
+      // show error message
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text('Invalid Input'),
+          content: Text(
+            'Please make sure valid title, amount, date and category was selected',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(ctx);
+              },
+              child: Text('Okay'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+    widget.onAddExpense(
+      Expense(
+        title: _titleController.text,
+        amount: enteredAmount,
+        date: _selectedDate!,
+        category: _selectedCategory,
+      ),
     );
   }
 
@@ -71,7 +118,11 @@ class _NewExpenseState extends State<NewExpense> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('Selcted Date'),
+                    Text(
+                      _selectedDate == null
+                          ? 'Selcted Date'
+                          : formater.format(_selectedDate!),
+                    ),
                     IconButton(
                       onPressed: _datePicker,
                       icon: Icon(Icons.calendar_month),
@@ -81,8 +132,29 @@ class _NewExpenseState extends State<NewExpense> {
               ),
             ],
           ),
+          SizedBox(height: 16),
           Row(
             children: [
+              DropdownButton(
+                value: _selectedCategory,
+                items: Category.values
+                    .map(
+                      (category) => DropdownMenuItem(
+                        value: category,
+                        child: Text(category.name.toUpperCase()),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    if (value == null) {
+                      return;
+                    }
+                    _selectedCategory = value;
+                  });
+                },
+              ),
+              Spacer(),
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
@@ -90,10 +162,7 @@ class _NewExpenseState extends State<NewExpense> {
                 child: Text('Cancel'),
               ),
               ElevatedButton(
-                onPressed: () {
-                  print(_titleController.text);
-                  print(_amountController.text);
-                },
+                onPressed: _submitExpenseData,
                 child: Text('Save Expense'),
               ),
             ],
