@@ -44,9 +44,10 @@ class _ExpensesState extends State<Expenses> {
     // It covers part of the screen from the bottom and rest UI becomes dimmed
     // It feels like a pop up dialog but styled like a sheet.
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
       builder: (ctx) {
-        return NewExpense(onAddExpense: _addExpense,);
+        return NewExpense(onAddExpense: _addExpense);
       },
     );
   }
@@ -57,21 +58,61 @@ class _ExpensesState extends State<Expenses> {
     });
   }
 
+  void _removeExpense(Expense expense) {
+    final expenseIndex = _registeredExpenses.indexOf(expense);
+    setState(() {
+      _registeredExpenses.remove(expense);
+    });
+
+    ScaffoldMessenger.of(context).clearSnackBars();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 3),
+        content: Text('Expense Deleted'),
+        action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () {
+            setState(() {
+              _registeredExpenses.insert(expenseIndex, expense);
+            });
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    Widget mainContent = Center(
+      child: Text('No expenses found. Start Adding some!'),
+    );
+
+    if (_registeredExpenses.isNotEmpty) {
+      mainContent = ExpensesList(
+        expenses_var: _registeredExpenses,
+        onRemoveExpense: _removeExpense,
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Expense Tracker'),
+        title: Text('Expense Tracker',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.blue,
         actions: [
-          IconButton(onPressed: _openAddExpenseOverlay, icon: Icon(Icons.add)),
+          IconButton(
+            onPressed: _openAddExpenseOverlay, 
+            icon: Icon(Icons.add),
+          ),
         ],
       ),
       body: Column(
         children: [
           Text('The chart'),
           Expanded(
-            child: ExpensesList(expenses_var: _registeredExpenses),
+            child: mainContent,
             // since it is a column or listView inside a column widget so we have to set
             // it to expanded so that it takes the required space
           ),

@@ -3,9 +3,15 @@ import 'package:expense_tracker_app/widgets/expense_list/expense_item.dart';
 import 'package:flutter/material.dart';
 
 class ExpensesList extends StatelessWidget {
-  const ExpensesList({super.key, required this.expenses_var});
+  const ExpensesList({
+    super.key,
+    required this.expenses_var,
+    required this.onRemoveExpense,
+  });
 
   final List<Expense> expenses_var;
+  final void Function(Expense expense) onRemoveExpense;
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -15,7 +21,13 @@ class ExpensesList extends StatelessWidget {
       // according to the no. of items the itemBulider runs that times
       // if the item count is 2 then the itemBuilder runs 2 times returning the given widget
       itemBuilder: (ctx, index) {
-        return ExpenseItem(expense: expenses_var[index]);
+        return Dismissible(
+          key: ValueKey(expenses_var[index]),
+          onDismissed: (direction) {
+            onRemoveExpense(expenses_var[index]);
+          },
+          child: ExpenseItem(expense: expenses_var[index]),
+        );
       },
     );
   }
