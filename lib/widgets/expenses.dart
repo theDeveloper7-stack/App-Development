@@ -1,3 +1,4 @@
+import 'package:expense_tracker_app/widgets/charts/chart.dart';
 import 'package:expense_tracker_app/widgets/expense_list/expenses_list.dart';
 import 'package:expense_tracker_app/models/expense.dart';
 import 'package:expense_tracker_app/widgets/new_expense.dart';
@@ -110,7 +111,7 @@ class _ExpensesState extends State<Expenses> {
       ),
       body: Column(
         children: [
-          Text('The chart'),
+          Chart(expenses: _registeredExpenses),
           Expanded(
             child: mainContent,
             // since it is a column or listView inside a column widget so we have to set

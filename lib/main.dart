@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(
     MaterialApp(
+      darkTheme: ThemeData.dark().copyWith(
+        useMaterial3: true,
+        colorScheme: kDarkColorScheme,
+      ),
       theme: ThemeData().copyWith(
         useMaterial3: true, 
         colorScheme: kColorScheme,
@@ -20,17 +24,13 @@ void main() {
               backgroundColor: kColorScheme.primaryContainer,
             ),
           ),
-          textTheme: ThemeData().textTheme.copyWith(
-            titleLarge: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: kColorScheme.onSecondaryContainer,
-              fontSize: 26,
-              ),
-          ),
         ),
+        themeMode: ThemeMode.system,
         home: Expenses(),
     ),
   );
 }
 
 var kColorScheme = ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 61, 136, 233),);
+
+var kDarkColorScheme = ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 105, 8, 184),);
