@@ -1,33 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:meals_app/Data/dummy_data.dart';
+import 'package:meals_app/Screens/meals.dart';
 import 'package:meals_app/Widgets/category_grid_item.dart';
 
 class CategoriesScreen extends StatelessWidget {
   /*
   StateLessWidget is for showning fixed UI
   It does not store data that changes.
-  */ 
-  const CategoriesScreen({super.key}); 
+  */
+  const CategoriesScreen({super.key});
   // this is the constructor for the CategoriesScreen
   //super.key passes key to parent class
 
+  void _selectCategory(BuildContext context) {
+    // here we are not updating the screen instead we are showing a different screen when tap on categories.
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => MealsScreen(title: 'Some title', meals: []),
+      ),
+    ); // it works on the stack so it is called push every time you push you will see the top most screen in the stack.
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Pick your Category'),
-      ),
+      appBar: AppBar(title: Text('Pick your Category')),
       body: GridView(
+        padding: EdgeInsets.all(25),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2, // number of columns
-          childAspectRatio: 3/2,//(width / height)
+          childAspectRatio: 3 / 2, //(width / height)
           crossAxisSpacing: 20, // space from left and right
           mainAxisSpacing: 20, // space from top and bottom
         ),
         children: [
-          for(final category in availableCategories)
-            CategoryGridItem(category: category)
+          for (final category in availableCategories)
+            CategoryGridItem(
+              category: category,
+              onSelectCategory: () {
+                _selectCategory(context);
+              },// here the CateGoryItem takes the _selectCategory function as argument which shows the MealsScreen().
+            ),
         ],
       ),
     );
