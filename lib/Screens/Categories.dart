@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:meals_app/Data/dummy_data.dart';
 import 'package:meals_app/Screens/meals.dart';
 import 'package:meals_app/Widgets/category_grid_item.dart';
+import 'package:meals_app/models/Category.dart';
 
 class CategoriesScreen extends StatelessWidget {
   /*
@@ -12,11 +13,16 @@ class CategoriesScreen extends StatelessWidget {
   // this is the constructor for the CategoriesScreen
   //super.key passes key to parent class
 
-  void _selectCategory(BuildContext context) {
+  void _selectCategory(BuildContext context, Category category) {
     // here we are not updating the screen instead we are showing a different screen when tap on categories.
+    final filteredMeals = dummyMeals.where((meal) => meal.categories.contains(category.id)).toList();
+    // this will return only the meals that belong to the selected category.
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (ctx) => MealsScreen(title: 'Some title', meals: []),
+        builder: (ctx) => MealsScreen(
+          title: category.title, 
+          meals: filteredMeals,
+          ),
       ),
     ); // it works on the stack so it is called push every time you push you will see the top most screen in the stack.
   }
@@ -38,8 +44,8 @@ class CategoriesScreen extends StatelessWidget {
             CategoryGridItem(
               category: category,
               onSelectCategory: () {
-                _selectCategory(context);
-              },// here the CateGoryItem takes the _selectCategory function as argument which shows the MealsScreen().
+                _selectCategory(context,category);
+              }, // here the CateGoryItem takes the _selectCategory function as argument which shows the MealsScreen().
             ),
         ],
       ),
