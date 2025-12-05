@@ -4,16 +4,17 @@ import 'package:meals_app/models/meal.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class MealItem extends StatelessWidget {
-  const MealItem({super.key, required this.meal});
+  const MealItem({super.key, required this.meal, required this.onSelectMeal});
 
   final Meal meal;
+  final void Function(Meal meal) onSelectMeal;
 
   String get complexityText {
     return meal.complexity.name[0].toLowerCase() +
         meal.complexity.name.substring(1);
   }
 
-    String get affordabilityText {
+  String get affordabilityText {
     return meal.affordability.name[0].toLowerCase() +
         meal.affordability.name.substring(1);
   }
@@ -31,7 +32,9 @@ class MealItem extends StatelessWidget {
       elevation: 2,
       // it creates the shadow effect under the card and the number identfies how above the card is raised.
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          onSelectMeal(meal);
+        },
         child: Stack(
           // this will stack the widgets one on another like a layer so that all widgets can freely acquire spaces
           // starts from the bottom to top.
@@ -79,10 +82,7 @@ class MealItem extends StatelessWidget {
                           label: '${meal.duration} min',
                         ),
                         SizedBox(width: 12),
-                        MealTrait(
-                          icon: Icons.rice_bowl,
-                          label: complexityText,
-                        ),
+                        MealTrait(icon: Icons.rice_bowl, label: complexityText),
                         SizedBox(width: 12),
                         MealTrait(
                           icon: Icons.monetization_on,
