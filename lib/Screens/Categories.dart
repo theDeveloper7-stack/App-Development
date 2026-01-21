@@ -29,9 +29,7 @@ class CategoriesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Pick your Category')),
-      body: GridView(
+    return GridView(
         padding: EdgeInsets.all(25),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2, // number of columns
@@ -48,7 +46,6 @@ class CategoriesScreen extends StatelessWidget {
               }, // here the CateGoryItem takes the _selectCategory function as argument which shows the MealsScreen().
             ),
         ],
-      ),
-    );
+      );
   }
 }
