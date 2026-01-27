@@ -3,15 +3,18 @@ import 'package:meals_app/Data/dummy_data.dart';
 import 'package:meals_app/Screens/meals.dart';
 import 'package:meals_app/Widgets/category_grid_item.dart';
 import 'package:meals_app/models/Category.dart';
+import 'package:meals_app/models/meal.dart';
 
 class CategoriesScreen extends StatelessWidget {
   /*
   StateLessWidget is for showning fixed UI
   It does not store data that changes.
   */
-  const CategoriesScreen({super.key});
+  const CategoriesScreen({super.key,required this.onToggleFavorite});
   // this is the constructor for the CategoriesScreen
   //super.key passes key to parent class
+
+  final void Function(Meal meal) onToggleFavorite;
 
   void _selectCategory(BuildContext context, Category category) {
     // here we are not updating the screen instead we are showing a different screen when tap on categories.
@@ -22,6 +25,7 @@ class CategoriesScreen extends StatelessWidget {
         builder: (ctx) => MealsScreen(
           title: category.title, 
           meals: filteredMeals,
+          onToggleFavorite: onToggleFavorite,
           ),
       ),
     ); // it works on the stack so it is called push every time you push you will see the top most screen in the stack.
